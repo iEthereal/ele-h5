@@ -44,3 +44,22 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## Reference
+- [Husky](https://typicode.github.io/husky/get-started.html) 
+    ```
+    npm install --save-dev husky
+    npx husky init
+    ```
+- [Commitlint](https://commitlint.js.org/)
+    ```
+    npm install -g @commitlint/cli @commitlint/config-conventional
+
+    echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
+
+    cat <<EEE > .husky/commit-msg
+    #!/bin/sh
+    . "\$(dirname "\$0")/_/husky. sh"
+    npx --no -— commitlint --edit "\${1}"
+    EEE
+    ```
