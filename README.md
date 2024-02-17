@@ -59,7 +59,8 @@ npm run lint
 
     cat <<EEE > .husky/commit-msg
     #!/bin/sh
-    . "\$(dirname "\$0")/_/husky. sh"
-    npx --no -— commitlint --edit "\${1}"
+    npx --no-install commitlint --edit $1
     EEE
+
+    chmod a+x .husky/commit-msg
     ```
