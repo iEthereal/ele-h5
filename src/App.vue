@@ -9,5 +9,12 @@ import {fetchTest } from '@/api/test'
     <RouterView/>
 </template>
 
-<style scoped>
+<style>
+@import 'normalize.css';
+
+#app {
+    /** 字体抗锯齿化，看起来更清晰 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
 </style>
