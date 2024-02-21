@@ -4,6 +4,7 @@ import {computed, ref, useAttrs, watch} from "vue";
 import {fetchSearchData} from "@/api/search";
 import type {ISearchResult} from "@/types";
 import {useToggle} from "@/use/UseToggle";
+import {useDebounce} from "@/use/UseDebounce";
 
 interface IEmits {
   (e: 'cancel'): void
@@ -11,7 +12,7 @@ interface IEmits {
 
 const emits = defineEmits<IEmits>()
 
-const HISTORY_TAGS=[
+const HISTORY_TAGS = [
   '比萨',
   '栗子',
   '切果NOW',
@@ -24,8 +25,8 @@ const HISTORY_TAGS=[
   '水果',
 ]
 
-const [isHistoryTagShown,toggleHistoryTag] = useToggle(false)
-const historyTags = computed(()=>(isHistoryTagShown.value?HISTORY_TAGS:HISTORY_TAGS.slice(0,5)))
+const [isHistoryTagShown, toggleHistoryTag] = useToggle(false)
+const historyTags = computed(() => (isHistoryTagShown.value ? HISTORY_TAGS : HISTORY_TAGS.slice(0, 5)))
 
 const searchValue = ref('');
 const searchResult = ref([] as ISearchResult[]);
@@ -45,18 +46,19 @@ const onSearch = async (v?: string | number) => {
   }
 }
 
-const onTagClick = (v:string)=>{
+const onTagClick = (v: string) => {
   searchValue.value = v;
   onSearch(v);
 }
 
-watch(searchValue,(nv)=>{
-  if (!nv) {
-    searchResult.value = []
-    return
-  }
-  onSearch(nv)
-})
+watch(searchValue, useDebounce((nv) => {
+      if (!nv) {
+        searchResult.value = []
+        return
+      }
+      onSearch(nv as string)
+    }, 1000)
+)
 </script>
 
 <template>
@@ -70,8 +72,8 @@ watch(searchValue,(nv)=>{
 
       <transition-group name="list">
 
-        <div class="history-tag" v-for="v in historyTags" :key="v" @click ='onTagClick(v)'>{{v}}</div>
-        <div class="history-tag" key="arrow"  @click="toggleHistoryTag">
+        <div class="history-tag" v-for="v in historyTags" :key="v" @click='onTagClick(v)'>{{ v }}</div>
+        <div class="history-tag" key="arrow" @click="toggleHistoryTag">
           <VanIcon v-if="isHistoryTagShown" name="arrow-up"></VanIcon>
           <VanIcon v-else name="arrow-down"></VanIcon>
         </div>
@@ -106,9 +108,11 @@ watch(searchValue,(nv)=>{
 
   &__history {
     padding: var(--van-padding-sm);
+
     .label {
       margin-bottom: var(--van-padding-xs);
     }
+
     .history-tag {
       display: inline-block;
       font-size: 12px;
@@ -140,6 +144,7 @@ watch(searchValue,(nv)=>{
       }
     }
   }
+
   .result-no,
   .searching {
     font-size: 12px;
@@ -148,10 +153,12 @@ watch(searchValue,(nv)=>{
     color: var(--van-gray-6);
   }
 }
+
 .list-enter-active,
 .list-leave-active {
   transition: all 1s ease;
 }
+
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
