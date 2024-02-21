@@ -9,17 +9,11 @@ interface IProps {
 
 defineProps<IProps>()
 
-const searchValue = ref("test")
+interface IEmits {
+  (e: 'searchClick'): void
+}
 
-const onSearch = (v?: string|number)=>{
-  console.log('==== search', v);
-}
-const onCancel = ()=>{
-  console.log("==== cancel");
-}
-const onClear = ()=>{
-  console.log('==== clear')
-}
+const emits = defineEmits<IEmits>()
 </script>
 
 <template>
@@ -32,8 +26,13 @@ const onClear = ()=>{
 
     </div>
 
-    <op-search v-model="searchValue" shape="round" background="linear-gradient(to right, rgb(53, 200, 250), rgb(31, 175, 243))"
-               placeholder="世界茶饮 35减2" show-action @search="onSearch" @cancel="onCancel" @clear="onClear">
+    <op-search shape="round" background="linear-gradient(to right, rgb(53, 200, 250), rgb(31, 175, 243))"
+               placeholder="世界茶饮 35减2"
+               @inputClick = 'emits("searchClick")'
+    >
+      <template #right-icon>
+        <div @click="emits('searchClick')" >搜索</div>
+      </template>
     </op-search>
 
     <div class="search-recommend">

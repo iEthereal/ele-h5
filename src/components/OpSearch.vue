@@ -17,6 +17,8 @@ interface IEmits {
   (e: 'clear'): void
 
   (e: 'update:modelValue', v?: string | number): void
+
+  (e: 'inputClick'): void
 }
 
 const emits = defineEmits<IEmits>()
@@ -45,7 +47,8 @@ const onClear = () => {
         <div class="op-cell__value">
           <div class="op-field__body">
             <input type="search" class="op-field__control" :value="modelValue" :placeholder="placeholder"
-                   @keypress="onKeyPress" @input="e=> emits('update:modelValue',(e.target as HTMLInputElement).value)">
+                   @keypress="onKeyPress" @input="e=> emits('update:modelValue',(e.target as HTMLInputElement).value)"
+            @click="emits('inputClick')">
             <div v-if="$slots['right-icon']" class="op-field__right-icon">
               <slot name="right-icon"></slot>
             </div>
@@ -93,6 +96,7 @@ const onClear = () => {
     padding-left: var(--van-padding-sm);
     background: var(--op-search-content-background);
     border-radius: var(--van-border-radius-sm);
+
     &--round {
       border-radius: var(--van-radius-max);
     }
@@ -115,6 +119,7 @@ const onClear = () => {
     .op-field__left-icon {
       color: var(--op-search-left-icon-color);
       margin-right: var(--van-padding-base);
+
       .van-icon {
         font-size: var(--van-field-icon-size);
       }
@@ -129,6 +134,7 @@ const onClear = () => {
   color: var(--van-cell-text-color);
   font-size: var(--van-cell-font-size);
   line-height: var(--van-cell-line-height);
+
   &__value {
     flex: 1;
     color: var(--van-cell-text-color);
@@ -152,20 +158,24 @@ const onClear = () => {
     background-color: transparent;
     resize: none;
     user-select: none;
+
     &::placeholder {
       color: var(--van-field-placeholder-text-color);
     }
   }
+
   &__body {
     display: flex;
     align-items: center;
   }
+
   &__right-icon {
     color: var(--van-field-right-icon-color);
     padding: 0 var(--van-padding-xs);
     line-height: inherit;
     flex-shrink: 0;
   }
+
   &__clear {
     color: var(--van-field-clear-icon-color);
     font-size: var(--van-field-clear-icon-size) !important;
