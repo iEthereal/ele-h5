@@ -5,6 +5,7 @@ import {useAsync} from "@/use/UseAsync";
 import {fetchHomePageData} from "@/api/home";
 import SearchView from "@/views/search/SearchView.vue";
 import type {IHomeInfo} from "@/types";
+import OpLoadingView from "@/components/OpLoadingView.vue";
 
 const recomments = [
   {
@@ -26,8 +27,12 @@ const {data,pending} = useAsync(fetchHomePageData,{} as IHomeInfo)
       <SearchView v-if="isSearchViewShown" @cancel="toggleSearchView"></SearchView>
     </transition>
     <TheTop :recomments="recomments" @searchClick="toggleSearchView"/>
-    {{pending}}
-    {{data}}
+
+    <OpLoadingView :loading="pending" type="skeleton">
+      <div>
+        {{data}}
+      </div>
+    </OpLoadingView>
   </div>
 </template>
 
