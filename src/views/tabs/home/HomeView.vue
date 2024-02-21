@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import TheTop from './components/TheTop.vue'
 import {useToggle} from "@/use/UseToggle";
+import {useAsync} from "@/use/UseAsync";
+import {fetchHomePageData} from "@/api/home";
 import SearchView from "@/views/search/SearchView.vue";
+import type {IHomeInfo} from "@/types";
 
 const recomments = [
   {
@@ -14,6 +17,7 @@ const recomments = [
 ]
 
 const [isSearchViewShown, toggleSearchView] = useToggle(false)
+const {data,pending} = useAsync(fetchHomePageData,{} as IHomeInfo)
 </script>
 
 <template>
@@ -22,6 +26,8 @@ const [isSearchViewShown, toggleSearchView] = useToggle(false)
       <SearchView v-if="isSearchViewShown" @cancel="toggleSearchView"></SearchView>
     </transition>
     <TheTop :recomments="recomments" @searchClick="toggleSearchView"/>
+    {{pending}}
+    {{data}}
   </div>
 </template>
 
