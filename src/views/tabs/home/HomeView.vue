@@ -9,6 +9,8 @@ import OpLoadingView from "@/components/OpLoadingView.vue";
 import ScrollBar from "@/views/tabs/home/components/ScrollBar.vue";
 import TheTransformer from "@/views/tabs/home/components/TheTransformer.vue";
 import CountDown from "@/views/tabs/home/components/CountDown.vue";
+import OpSwipe from "@/components/swipe/OpSwipe";
+import OpSwipeItem from "@/components/swipe/OpSwipeItem";
 
 const recomments = [
   {
@@ -39,6 +41,11 @@ const {data,pending} = useAsync(fetchHomePageData,{} as IHomeInfo)
       <ScrollBar :data="data.scrollBarInfoList"></ScrollBar>
       <div class="home-page__activity">
         <CountDown :data="data.countdown"></CountDown>
+        <OpSwipe class="home-page__activity__swipe"  :autoplay="3000" :loop="true">
+          <op-swipe-item v-for="v in data.activities" :key="v">
+            <img :src="v"/>
+          </op-swipe-item>
+        </OpSwipe>
       </div>
     </OpLoadingView>
   </div>
