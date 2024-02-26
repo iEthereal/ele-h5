@@ -7,6 +7,7 @@ import App from './App.vue'
 import router from './router'
 
 import {Tabbar, TabbarItem, Search, Icon, Loading, Skeleton,Sticky,Tabs, Tab,Lazyload} from 'vant'
+import {NavBar,Form,CellGroup,Field,Button} from "vant";
 import lazyPlugin from '@/directives/lazyLoading'
 import 'vant/lib/index.css'
 import '@/assets/common.scss'
@@ -27,6 +28,12 @@ app.use(Tab)
 app.use(Tabs)
 // app.use(Lazyload)
 app.use(lazyPlugin)
+
+app.use(NavBar)
+app.use(Form)
+app.use(CellGroup)
+app.use(Field)
+app.use(Button)
 
 const rootValue = 16
 const rootWidth = 390
