@@ -6,7 +6,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-import {Tabbar, TabbarItem, Search, Icon, Loading, Skeleton} from 'vant'
+import {Tabbar, TabbarItem, Search, Icon, Loading, Skeleton,Sticky,Tabs, Tab,Lazyload} from 'vant'
 
 import 'vant/lib/index.css'
 import '@/assets/common.scss'
@@ -22,7 +22,11 @@ app.use(Search)
 app.use(Icon)
 app.use(Loading)
 app.use(Skeleton)
- 
+app.use(Sticky)
+app.use(Tab)
+app.use(Tabs)
+app.use(Lazyload)
+
 const rootValue = 16
 const rootWidth = 390
 const deviceWidth = document.documentElement.clientWidth

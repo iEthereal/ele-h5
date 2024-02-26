@@ -11,6 +11,9 @@ import TheTransformer from "@/views/tabs/home/components/TheTransformer.vue";
 import CountDown from "@/views/tabs/home/components/CountDown.vue";
 import OpSwipe from "@/components/swipe/OpSwipe";
 import OpSwipeItem from "@/components/swipe/OpSwipeItem";
+import {PRIMARY_COLOR, TRANSPARENT} from "@/config";
+import {ref} from "vue";
+import {HOME_TABS} from "@/views/tabs/home/config";
 
 const recomments = [
   {
@@ -23,7 +26,12 @@ const recomments = [
 ]
 
 const [isSearchViewShown, toggleSearchView] = useToggle(false)
-const {data,pending} = useAsync(fetchHomePageData,{} as IHomeInfo)
+const {data, pending} = useAsync(fetchHomePageData, {} as IHomeInfo)
+
+const tabBackgruondColor = ref(TRANSPARENT)
+const onTabScroll = ({isFixed}: { isFixed: boolean }) => {
+  tabBackgruondColor.value = isFixed ? 'white' : TRANSPARENT
+}
 </script>
 
 <template>
@@ -31,7 +39,8 @@ const {data,pending} = useAsync(fetchHomePageData,{} as IHomeInfo)
     <transition name="fade">
       <SearchView v-if="isSearchViewShown" @cancel="toggleSearchView"></SearchView>
     </transition>
-    <TheTop :recomments="recomments" @searchClick="toggleSearchView"/>
+    <div v-show="!isSearchViewShown">
+      <TheTop :recomments="recomments" @searchClick="toggleSearchView"/>
 
     <OpLoadingView :loading="pending" type="skeleton">
       <div class="home-page__banner">
@@ -41,13 +50,28 @@ const {data,pending} = useAsync(fetchHomePageData,{} as IHomeInfo)
       <ScrollBar :data="data.scrollBarInfoList"></ScrollBar>
       <div class="home-page__activity">
         <CountDown :data="data.countdown"></CountDown>
-        <OpSwipe class="home-page__activity__swipe"  :autoplay="3000" :loop="true">
+        <OpSwipe class="home-page__activity__swipe" :autoplay="3000" :loop="true">
           <op-swipe-item v-for="v in data.activities" :key="v">
             <img :src="v"/>
           </op-swipe-item>
         </OpSwipe>
       </div>
+
+      <VanTabs
+          sticky
+          offset-top="54px"
+          :color="PRIMARY_COLOR"
+          :background="tabBackgruondColor"
+          @scroll="onTabScroll"
+      >
+        <VanTab v-for="v in HOME_TABS" :key="v.value" :title="v.title">
+          <component :is="v.component"></component>
+        </VanTab>
+      </VanTabs>
     </OpLoadingView>
+
+    </div>
+
   </div>
 </template>
 
@@ -58,7 +82,7 @@ const {data,pending} = useAsync(fetchHomePageData,{} as IHomeInfo)
 }
 
 .fade-enter-from, .fade-leave-to {
-   opacity: 0;
+  opacity: 0;
 }
 
 .home-page {
@@ -72,6 +96,7 @@ const {data,pending} = useAsync(fetchHomePageData,{} as IHomeInfo)
       background: white;
     }
   }
+
   &__activity {
     display: flex;
     justify-content: space-between;
@@ -82,6 +107,7 @@ const {data,pending} = useAsync(fetchHomePageData,{} as IHomeInfo)
       border-radius: 8px;
       width: 180px;
       height: 170px;
+
       img {
         width: 100%;
         height: 100%;
